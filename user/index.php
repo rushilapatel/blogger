@@ -1,19 +1,19 @@
 <?php
 //include config
-require_once('../user/config.php');
-
+require_once('../includes/config_blogger.php');
+$blogger = new Blogger($db);
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$blogger->is_blogger_logged_in()){ header('Location: login.php'); }
 
 //show message from add / edit page
-if(isset($_GET['delpost'])){ 
+if(isset($_GET['delpost'])){
 
-	$stmt = $db->prepare('DELETE FROM blog_posts WHERE postID = :postID') ;
-	$stmt->execute(array(':postID' => $_GET['delpost']));
+	$stmt = $db->prepare('DELETE FROM blog_post WHERE postID = :postID AND bloggerId = :bloggerId') ;
+	$stmt->execute(array(':postID' => $_GET['delpost'],':bloggerId' => $_SESSION['blogger_id']));
 
 	header('Location: index.php?action=deleted');
 	exit;
-} 
+}
 
 ?>
 <!doctype html>
@@ -39,11 +39,11 @@ if(isset($_GET['delpost'])){
 
 	<?php include('menu.php');?>
 
-	<?php 
+	<?php
 	//show message from add / edit page
-	if(isset($_GET['action'])){ 
-		echo '<h3>Post '.$_GET['action'].'.</h3>'; 
-	} 
+	if(isset($_GET['action'])){
+		echo '<h3>Post '.$_GET['action'].'.</h3>';
+	}
 	?>
 
 	<table>
@@ -55,20 +55,21 @@ if(isset($_GET['delpost'])){
 	<?php
 		try {
 
-			$stmt = $db->query('SELECT postID, postTitle, postDate FROM blog_posts ORDER BY postID DESC');
+			$stmt = $db->prepare('SELECT postID, postTitle, postDate FROM blog_post WHERE bloggerId = :bloggerId ORDER BY postID DESC');
+			$stmt->execute(array('bloggerId' => $_SESSION['blogger_id']));
 			while($row = $stmt->fetch()){
-				
+
 				echo '<tr>';
 				echo '<td>'.$row['postTitle'].'</td>';
 				echo '<td>'.date('jS M Y', strtotime($row['postDate'])).'</td>';
 				?>
 
-				<!--<td>
-					<a href="edit-post.php?id=<?php echo $row['postID'];?>">Edit</a> | 
+				<td>
+					<a href="edit-post.php?id=<?php echo $row['postID'];?>">Edit</a> |
 					<a href="javascript:delpost('<?php echo $row['postID'];?>','<?php echo $row['postTitle'];?>')">Delete</a>
-				</td>-->
-				
-				<?php 
+				</td>
+
+				<?php
 				echo '</tr>';
 
 			}

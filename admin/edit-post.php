@@ -1,8 +1,8 @@
 <?php //include config
-require_once('../includes/config.php');
+require_once('../includes/config_admin.php');
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$admin->is_admin_logged_in()){ header('Location: login.php'); }
 ?>
 <!doctype html>
 <html lang="en">
@@ -29,7 +29,6 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 <div id="wrapper">
 
 	<?php include('menu.php');?>
-	<p><a href="./">Blog Admin Index</a></p>
 
 	<h2>Edit Post</h2>
 
@@ -66,7 +65,7 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 			try {
 
 				//insert into database
-				$stmt = $db->prepare('UPDATE blog_posts SET postTitle = :postTitle, postDesc = :postDesc, postCont = :postCont WHERE postID = :postID') ;
+				$stmt = $db->prepare('UPDATE blog_post SET postTitle = :postTitle, postDesc = :postDesc, postCont = :postCont WHERE postID = :postID') ;
 				$stmt->execute(array(
 					':postTitle' => $postTitle,
 					':postDesc' => $postDesc,
@@ -99,9 +98,9 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 
 		try {
 
-			$stmt = $db->prepare('SELECT postID, postTitle, postDesc, postCont FROM blog_posts WHERE postID = :postID') ;
+			$stmt = $db->prepare('SELECT postID, postTitle, postDesc, postCont FROM blog_post WHERE postID = :postID') ;
 			$stmt->execute(array(':postID' => $_GET['id']));
-			$row = $stmt->fetch(); 
+			$row = $stmt->fetch();
 
 		} catch(PDOException $e) {
 		    echo $e->getMessage();
@@ -128,4 +127,4 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 </div>
 
 </body>
-</html>	
+</html>

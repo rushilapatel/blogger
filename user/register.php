@@ -1,15 +1,12 @@
-
 <?php //include config
-require_once('../user/config.php');
+require_once('../includes/config_blogger.php');
 
-//if not logged in redirect to login page
-/*if(!$user->is_logged_in()){ header('Location: login.php'); }*/
 ?>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Admin - Add User</title>
+  <title>Register</title>
   <link rel="stylesheet" href="../style/normalize.css">
   <link rel="stylesheet" href="../style/main.css">
 </head>
@@ -17,10 +14,7 @@ require_once('../user/config.php');
 
 <div id="wrapper">
 
-	<?php include('menu.php');?>
-	<p><a href="users.php">User Admin Index</a></p>
-
-	<h2>Add User</h2>
+	<?php include('menu_register.php');?>
 
 	<?php
 
@@ -31,8 +25,8 @@ require_once('../user/config.php');
 		extract($_POST);
 
 		//very basic validation
-		if($username ==''){
-			$error[] = 'Please enter the username.';
+		if($bloggername ==''){
+			$error[] = 'Please enter the bloggername.';
 		}
 
 		if($password ==''){
@@ -53,20 +47,19 @@ require_once('../user/config.php');
 
 		if(!isset($error)){
 
-			$hashedpassword = $user->password_hash($password, PASSWORD_BCRYPT);
+			$hashedpassword = $blogger->password_hash($password, PASSWORD_BCRYPT);
 
 			try {
 
-				//insert into database
-				$stmt = $db->prepare('INSERT INTO blog_users (username,password,email) VALUES (:username, :password, :email)') ;
+				$stmt = $db->prepare('INSERT INTO blog_blogger (bloggerName,password,bloggerEmail) VALUES (:bloggername, :password, :email)') ;
 				$stmt->execute(array(
-					':username' => $username,
+					':bloggername' => $bloggername,
 					':password' => $hashedpassword,
 					':email' => $email
 				));
 
 				//redirect to index page
-				header('Location: users.php?action=added');
+				header('Location: login.php');
 				exit;
 
 			} catch(PDOException $e) {
@@ -87,8 +80,8 @@ require_once('../user/config.php');
 
 	<form action='' method='post'>
 
-		<p><label>Username</label><br />
-		<input type='text' name='username' value='<?php if(isset($error)){ echo $_POST['username'];}?>'></p>
+		<p><label>bloggername</label><br />
+		<input type='text' name='bloggername' value='<?php if(isset($error)){ echo $_POST['bloggername'];}?>'></p>
 
 		<p><label>Password</label><br />
 		<input type='password' name='password' value='<?php if(isset($error)){ echo $_POST['password'];}?>'></p>
@@ -98,8 +91,8 @@ require_once('../user/config.php');
 
 		<p><label>Email</label><br />
 		<input type='text' name='email' value='<?php if(isset($error)){ echo $_POST['email'];}?>'></p>
-		
-		<p><input type='submit' name='submit' value='Add User'></p>
+
+		<p><input type='submit' name='submit' value='Add blogger'></p>
 
 	</form>
 

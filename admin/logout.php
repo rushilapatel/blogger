@@ -1,9 +1,9 @@
 <?php
 //include config
-require_once('../includes/config.php');
+require_once('../includes/config_admin.php');
 
 //log user out
-$user->logout();
-header('Location: index.php'); 
+$admin->logout();
+header('Location: index.php');
 
 ?>

@@ -1,4 +1,5 @@
-<?php require('includes/config.php'); ?>
+<?php
+require_once('includes/config.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,35 +10,32 @@
 </head>
 <body>
 
-	<div id="wrapper">
+    <div id="wrapper">
+            <h1>Blog</h1>
+            <hr/>
+            <a href="user/login.php">Login</a>
+            <a href="user/register.php">Register</a>
+            <hr/>
+            <?php
+                    try {
 
-		<h1>Blog</h1>
-		<hr />
-		
-		<a href="admin/login.php">admin</a>
-		<a href="user/login.php">Login</a>
-		<a href="user/register.php">Register</a>
-		<?php
-			try {
+                            $stmt = $db->query('SELECT postID, postTitle, postDesc, postDate FROM blog_post ORDER BY postID DESC');
+                            while($row = $stmt->fetch()){
 
-				$stmt = $db->query('SELECT postID, postTitle, postDesc, postDate FROM blog_posts ORDER BY postID DESC');
-				while($row = $stmt->fetch()){
-					
-					echo '<div>';
-						echo '<h1><a href="viewpost.php?id='.$row['postID'].'">'.$row['postTitle'].'</a></h1>';
-						echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
-						echo '<p>'.$row['postDesc'].'</p>';				
-						echo '<p><a href="viewpost.php?id='.$row['postID'].'">Read More</a></p>';				
-					echo '</div>';
+                                    echo '<div>';
+                                            echo '<h1><a href="viewpost.php?id='.$row['postID'].'">'.$row['postTitle'].'</a></h1>';
+                                            echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
+                                            echo '<p>'.$row['postDesc'].'</p>';
+                                            echo '<p><a href="viewpost.php?id='.$row['postID'].'">Read More</a></p>';
+                                    echo '</div>';
 
-				}
+                            }
 
-			} catch(PDOException $e) {
-			    echo $e->getMessage();
-			}
-		?>
-
-	</div>
+                    } catch(PDOException $e) {
+                        echo $e->getMessage();
+                    }
+            ?>
+    </div>
 
 
 </body>

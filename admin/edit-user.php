@@ -1,8 +1,8 @@
 <?php //include config
-require_once('../includes/config.php');
+require_once('../includes/config_admin.php');
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$admin->is_admin_logged_in()){ header('Location: login.php'); }
 ?>
 <!doctype html>
 <html lang="en">
@@ -50,7 +50,7 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 			}
 
 		}
-		
+
 
 		if($email ==''){
 			$error[] = 'Please enter the email address.';
@@ -62,30 +62,30 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 
 				if(isset($password)){
 
-					$hashedpassword = $user->password_hash($password, PASSWORD_BCRYPT);
+					$hashedpassword = $admin->password_hash($password, PASSWORD_BCRYPT);
 
 					//update into database
-					$stmt = $db->prepare('UPDATE blog_members SET username = :username, password = :password, email = :email WHERE memberID = :memberID') ;
+					$stmt = $db->prepare('UPDATE blog_user SET username = :username, password = :password, email = :email WHERE adminId = :adminId') ;
 					$stmt->execute(array(
 						':username' => $username,
 						':password' => $hashedpassword,
 						':email' => $email,
-						':memberID' => $memberID
+						':adminId' => $adminId
 					));
 
 
 				} else {
 
 					//update database
-					$stmt = $db->prepare('UPDATE blog_members SET username = :username, email = :email WHERE memberID = :memberID') ;
+					$stmt = $db->prepare('UPDATE blog_user SET username = :username, email = :email WHERE adminId = :adminId') ;
 					$stmt->execute(array(
 						':username' => $username,
 						':email' => $email,
-						':memberID' => $memberID
+						':adminId' => $adminId
 					));
 
 				}
-				
+
 
 				//redirect to index page
 				header('Location: users.php?action=updated');
@@ -112,9 +112,9 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 
 		try {
 
-			$stmt = $db->prepare('SELECT memberID, username, email FROM blog_members WHERE memberID = :memberID') ;
-			$stmt->execute(array(':memberID' => $_GET['id']));
-			$row = $stmt->fetch(); 
+			$stmt = $db->prepare('SELECT adminId, username, email FROM blog_user WHERE adminId = :adminId') ;
+			$stmt->execute(array(':adminId' => $_GET['id']));
+			$row = $stmt->fetch();
 
 		} catch(PDOException $e) {
 		    echo $e->getMessage();
@@ -123,7 +123,7 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 	?>
 
 	<form action='' method='post'>
-		<input type='hidden' name='memberID' value='<?php echo $row['memberID'];?>'>
+		<input type='hidden' name='adminId' value='<?php echo $row['adminId'];?>'>
 
 		<p><label>Username</label><br />
 		<input type='text' name='username' value='<?php echo $row['username'];?>'></p>
@@ -144,4 +144,4 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 </div>
 
 </body>
-</html>	
+</html>

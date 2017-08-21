@@ -1,14 +1,14 @@
 <?php //include config
-require_once('../includes/config.php');
+require_once('../includes/config_blogger.php');
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$blogger->is_blogger_logged_in()){ header('Location: login.php'); }
 ?>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Admin - Add Post</title>
+  <title>Add Post</title>
   <link rel="stylesheet" href="../style/normalize.css">
   <link rel="stylesheet" href="../style/main.css">
   <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
@@ -61,12 +61,13 @@ if(!$user->is_logged_in()){ header('Location: login.php'); }
 			try {
 
 				//insert into database
-				$stmt = $db->prepare('INSERT INTO blog_posts (postTitle,postDesc,postCont,postDate) VALUES (:postTitle, :postDesc, :postCont, :postDate)') ;
+				$stmt = $db->prepare('INSERT INTO blog_post (postTitle,postDesc,postCont,postDate,bloggerId) VALUES (:postTitle, :postDesc, :postCont, :postDate, :bloggerId)') ;
 				$stmt->execute(array(
 					':postTitle' => $postTitle,
 					':postDesc' => $postDesc,
 					':postCont' => $postCont,
-					':postDate' => date('Y-m-d H:i:s')
+					':postDate' => date('Y-m-d H:i:s'),
+          ':bloggerId' => $_SESSION['blogger_id'],
 				));
 
 				//redirect to index page

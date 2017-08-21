@@ -1,9 +1,9 @@
 <?php
 //include config
-require_once('../includes/config.php');
+require_once('../includes/config_blogger.php');
 
 //log user out
-$user->logout();
+$blogger->logout();
 header('Location: index.php'); 
 
 ?>

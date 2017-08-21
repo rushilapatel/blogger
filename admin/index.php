@@ -1,19 +1,20 @@
 <?php
 //include config
-require_once('../includes/config.php');
+require_once('../includes/config_admin.php');
+
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); }
+if(!$admin->is_admin_logged_in()){ header('Location: login.php'); }
 
 //show message from add / edit page
-if(isset($_GET['delpost'])){ 
+if(isset($_GET['delpost'])){
 
-	$stmt = $db->prepare('DELETE FROM blog_posts WHERE postID = :postID') ;
+	$stmt = $db->prepare('DELETE FROM blog_post WHERE postID = :postID') ;
 	$stmt->execute(array(':postID' => $_GET['delpost']));
 
 	header('Location: index.php?action=deleted');
 	exit;
-} 
+}
 
 ?>
 <!doctype html>
@@ -39,36 +40,38 @@ if(isset($_GET['delpost'])){
 
 	<?php include('menu.php');?>
 
-	<?php 
+	<?php
 	//show message from add / edit page
-	if(isset($_GET['action'])){ 
-		echo '<h3>Post '.$_GET['action'].'.</h3>'; 
-	} 
+	if(isset($_GET['action'])){
+		echo '<h3>Post '.$_GET['action'].'.</h3>';
+	}
 	?>
 
 	<table>
 	<tr>
 		<th>Title</th>
+                <th>Blogger</th>
 		<th>Date</th>
 		<th>Action</th>
 	</tr>
 	<?php
 		try {
 
-			$stmt = $db->query('SELECT postID, postTitle, postDate FROM blog_posts ORDER BY postID DESC');
+			$stmt = $db->query('SELECT postID, postTitle, postDate,bloggerName FROM blog_post NATURAL JOIN blog_blogger ORDER BY postID DESC');
 			while($row = $stmt->fetch()){
-				
+
 				echo '<tr>';
 				echo '<td>'.$row['postTitle'].'</td>';
+                                echo '<td>'.$row['bloggerName'].'</td>';
 				echo '<td>'.date('jS M Y', strtotime($row['postDate'])).'</td>';
 				?>
 
 				<td>
-					<a href="edit-post.php?id=<?php echo $row['postID'];?>">Edit</a> | 
+					<a href="edit-post.php?id=<?php echo $row['postID'];?>">Edit</a> |
 					<a href="javascript:delpost('<?php echo $row['postID'];?>','<?php echo $row['postTitle'];?>')">Delete</a>
 				</td>
-				
-				<?php 
+
+				<?php
 				echo '</tr>';
 
 			}
@@ -78,8 +81,6 @@ if(isset($_GET['delpost'])){
 		}
 	?>
 	</table>
-
-	<p><a href='add-post.php'>Add Post</a></p>
 
 </div>
 
