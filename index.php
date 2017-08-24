@@ -1,27 +1,41 @@
 <?php
 require_once('includes/config_blogger.php');
-if(!$blogger->is_blogger_logged_in()){ header('Location: user/index.php'); } ?>
-
+if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); } 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
-<script>
+    $(function() {
+      $( "#search" ).autocomplete({
+        source: 'search.php'
+      });
+    });
     $(document).ready(function(){
-        $(function() {
-          $( "#search" ).autocomplete({
-            source: 'search.php'
-          });
-        });
-    });
-   $(document).ready(function(){
         $(".like").click(function(){
-            $("p").hide();
+            var pId = this.id;
+            var bId = <?php echo $_SESSION['blogger_id'];?>;
+           $.post("like_post.php",
+           {
+                postId: pId,
+                bloggerId: bId
+           },
+           function(response,status){
+                // alert("*----Received Data----*\n\nResponse : " + response+"\n\nStatus : " + status);
+                response = $.parseJSON( response );
+                $("#likespan".concat(pId)).html(response.likes);
+                if(response.inserted){
+                    $("#".concat(pId)).html("Unlike");
+                }else{
+                    $("#".concat(pId)).html("Like");
+                }
+           });
+            var postId1 = $(this).id;
+            
         });
     });
-    
 </script>
 <style> 
 input[type=text] {
@@ -68,12 +82,23 @@ input[type=text]:focus {
                                 $stmt1 = $db->prepare('SELECT bloggerId FROM blog_post_like WHERE postId = :postId ');
                                 $stmt1->execute(array(':postId' => $row['postId']));
                                 $likes = $stmt1->rowCount();
+                                $stmt1 = $db->prepare('SELECT * FROM blog_post_like WHERE (postId,bloggerId) = (:postId, :bloggerId)');
+                                $stmt1->execute(array(':postId' => $row['postId'],':bloggerId' => $_SESSION['blogger_id']));
+                                $liked = $stmt1->rowCount();
                                 echo '<div>';
                                         echo '<h1><a href="viewpost.php?id='.$row['postId'].'">'.$row['postTitle'].'</a></h1>';
                                         echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
                                         echo '<p>'.$row['postDesc'].'</p>';
                                         echo '<p><a href="viewpost.php?id='.$row['postId'].'">Read More</a></p>';
-                                        echo '<p><button class="like" href="">Like </button> '. $likes .' </p>';
+                                        echo '<p><button class="like" id="'. $row['postId'] . '">';
+                                        if($liked <= 0){
+                                            echo ' Like ';
+                                        }
+                                        else{
+                                            echo ' Unlike ';
+                                        }
+                                        echo '</button>';
+                                        echo '<span id = "likespan'. $row['postId'] .'"> '. $likes .'</span>'.' </p>';
                                 echo '</div>';
                                 
                       
