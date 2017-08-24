@@ -2,9 +2,6 @@
 <?php
     //database configuration
     include('includes/config.php');
-    //connect with the database
-    //echo "y0";
-    $db = new mysqli("localhost","root","","blogdb");
 
     //get search term
     $searchTerm = $_GET['term'];

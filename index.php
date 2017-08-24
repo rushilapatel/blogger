@@ -1,15 +1,28 @@
 <?php
-require_once('includes/config.php'); ?>
+require_once('includes/config_blogger.php');
+if(!$blogger->is_blogger_logged_in()){ header('Location: user/index.php'); } ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script>$(function() {
-      $( "#search" ).autocomplete({
-        source: 'search.php'
-      });
-    });</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+<script>
+    $(document).ready(function(){
+        $(function() {
+          $( "#search" ).autocomplete({
+            source: 'search.php'
+          });
+        });
+    });
+   $(document).ready(function(){
+        $(".like").click(function(){
+            $("p").hide();
+        });
+    });
+    
+</script>
 <style> 
 input[type=text] {
     width: 250px;
@@ -50,16 +63,20 @@ input[type=text]:focus {
             <?php
                     try {
 
-                            $stmt = $db->query('SELECT postID, postTitle, postDesc, postDate FROM blog_post ORDER BY postID DESC');
+                            $stmt = $db->query('SELECT postId, postTitle, postDesc, postDate FROM blog_post ORDER BY postId DESC');
                             while($row = $stmt->fetch()){
-
-                                    echo '<div>';
-                                            echo '<h1><a href="viewpost.php?id='.$row['postID'].'">'.$row['postTitle'].'</a></h1>';
-                                            echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
-                                            echo '<p>'.$row['postDesc'].'</p>';
-                                            echo '<p><a href="viewpost.php?id='.$row['postID'].'">Read More</a></p>';
-                                    echo '</div>';
-
+                                $stmt1 = $db->prepare('SELECT bloggerId FROM blog_post_like WHERE postId = :postId ');
+                                $stmt1->execute(array(':postId' => $row['postId']));
+                                $likes = $stmt1->rowCount();
+                                echo '<div>';
+                                        echo '<h1><a href="viewpost.php?id='.$row['postId'].'">'.$row['postTitle'].'</a></h1>';
+                                        echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
+                                        echo '<p>'.$row['postDesc'].'</p>';
+                                        echo '<p><a href="viewpost.php?id='.$row['postId'].'">Read More</a></p>';
+                                        echo '<p><button class="like" href="">Like </button> '. $likes .' </p>';
+                                echo '</div>';
+                                
+                      
                             }
 
                     } catch(PDOException $e) {

@@ -1,7 +1,6 @@
 <?php
 //include config
 require_once('../includes/config_blogger.php');
-$blogger = new Blogger($db);
 //if not logged in redirect to login page
 if(!$blogger->is_blogger_logged_in()){ header('Location: login.php'); }
 
