@@ -1,6 +1,6 @@
 <?php
 require_once('includes/config_blogger.php');
-if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); } 
+if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,14 +15,23 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
     });
 	$(document).ready(function(){
         $(".follow").click(function(){
-            var pId = this.id;
+            var fId = (this.id).replace("followButton","");
             var bId = <?php echo $_SESSION['blogger_id'];?>;
            $.post("follow.php",
            {
-                followingId: pId,
+                followingId: fId,
                 bloggerId: bId
-           }
-	});
+           },
+           function(response,status){
+            //alert("*----Received Data----*\n\nResponse : " + response+"\n\nStatus : " + status);
+            response = $.parseJSON(response);
+            if(response.followed){
+                $("#followButton".concat(fId)).html("Unfollow");
+            }else{
+                $("#followButton".concat(fId)).html("Follow");
+            }
+           });
+       });
 	});
     $(document).ready(function(){
         $(".like").click(function(){
@@ -44,11 +53,11 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
                 }
            });
             var postId1 = $(this).id;
-            
+
         });
     });
 </script>
-<style> 
+<style>
 input[type=text] {
     width: 250px;
     box-sizing: border-box;
@@ -57,7 +66,7 @@ input[type=text] {
     font-size: 16px;
     background-color: white;
     background-image: url('images/search.png');
-    background-position: 10px 10px; 
+    background-position: 10px 10px;
     background-repeat: no-repeat;
     padding: 12px 20px 12px 40px;
     -webkit-transition: width 0.4s ease-in-out;
@@ -83,10 +92,10 @@ input[type=text]:focus {
             <a href="user/login.php">Login</a>
             <a href="user/register.php">Register</a>
             <hr/>
-			
+
             <?php
                     try {
-                            $stmt = $db->query('SELECT postId, postTitle, postDesc, postDate, bloggerId FROM blog_post ORDER BY postId DESC');
+                            $stmt = $db->query('SELECT postId, postTitle, postDesc, postDate, bloggerId,bloggerName FROM blog_post NATURAL JOIN blog_blogger ORDER BY postId DESC');
                             while($row = $stmt->fetch()){
                                 $stmt1 = $db->prepare('SELECT bloggerId FROM blog_post_like WHERE postId = :postId ');
                                 $stmt1->execute(array(':postId' => $row['postId']));
@@ -94,12 +103,48 @@ input[type=text]:focus {
                                 $stmt1 = $db->prepare('SELECT * FROM blog_post_like WHERE (postId,bloggerId) = (:postId, :bloggerId)');
                                 $stmt1->execute(array(':postId' => $row['postId'],':bloggerId' => $_SESSION['blogger_id']));
                                 $liked = $stmt1->rowCount();
+                                $stmt1 = $db->prepare('SELECT * FROM blog_follow WHERE (bloggerId,followingId) = (:bloggerId, :followingId)') ;
+                              	$stmt1->execute(array(
+                              				':bloggerId' => $_SESSION['blogger_id'],
+                              				':followingId' => $row['bloggerId']
+                              			));
+                                $followed = $stmt1->rowCount();
                                 echo '<div>';
                                         echo '<h1><a href="viewpost.php?id='.$row['postId'].'">'.$row['postTitle'].'</a></h1>';
-                                        echo '<p>Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).'</p>';
-                                        echo '<p>'.$row['postDesc'].'</p>';
-                                        echo '<p><a href="viewpost.php?id='.$row['postId'].'">Read More</a></p>';
-                                        echo '<p><button class="like" id="'. $row['postId'] . '">';
+
+                                        echo '<p>' .
+                                        '<span>' .
+                                        'blogger :: '.
+                                        '</span>'.
+                                        '<span class="bloggerName">'.
+                                        $row['bloggerName'] .
+                                        ' </span>';
+                                        echo '<button class="follow" id="followButton'. $row['bloggerId'] . '">';
+                                        if($followed <= 0){
+                                            echo ' Follow ';
+                                        }
+                                        else{
+                                            echo ' Unfollow ';
+                                        }
+                    										echo '</button>'.
+                                        '</p>';
+
+
+                                        echo '<p>'.
+                                        'Posted on '.date('jS M Y H:i:s', strtotime($row['postDate'])).
+                                        '</p>';
+
+                                        echo '<p>'.
+                                        $row['postDesc'].
+                                        '</p>';
+                                        echo '<p>'.
+                                        '<a href="viewpost.php?id='.$row['postId'].'">'.
+                                        'Read More'.
+                                        '</a>'.
+                                        '</p>';
+
+                                        echo '<p>'.
+                                        '<button class="like" id="'. $row['postId'] . '">';
                                         if($liked <= 0){
                                             echo ' Like ';
                                         }
@@ -107,13 +152,13 @@ input[type=text]:focus {
                                             echo ' Unlike ';
                                         }
                                         echo '</button>';
-                                        echo '<span id = "likespan'. $row['postId'] .'"> '. $likes .'</span>'.' </p>';
-										echo '<p><button class="follow" id="'. $row['bloggerId'] . '">';
-										echo 'Follow';
-										echo '</button>';
+                                        echo '<span id = "likespan'. $row['postId'] .'"> '.
+                                        $likes .
+                                        '</span>'.
+                                        ' </p>';
                                 echo '</div>';
-                                
-                      
+
+
                             }
                     } catch(PDOException $e) {
                         echo $e->getMessage();
