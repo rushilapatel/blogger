@@ -1,6 +1,7 @@
 <?php
 require_once('includes/config_blogger.php');
 if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); } ?>
+
 <?php
 	try {
 	$resp = new \stdClass();
@@ -26,8 +27,8 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); } ?>
 			}	
 		$stmt1 = $db->prepare('SELECT bloggerId FROM blog_follow WHERE followingId = :followingId ');
 		$stmt1->execute(array(':followingId' => $_REQUEST['followingId']));
-		$follow = $stmt1->rowCount();
-		 $resp->follow = $follow;
-		 echo json_encode($resp);
+		//$follows = $stmt1->rowCount();
+		 //$resp->follows = $follows;
+		 //echo json_encode($resp);
 		 }
 	?>			

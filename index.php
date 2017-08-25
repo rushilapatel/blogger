@@ -13,7 +13,7 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
         source: 'search.php'
       });
     });
-	 $(document).ready(function(){
+	$(document).ready(function(){
         $(".follow").click(function(){
             var pId = this.id;
             var bId = <?php echo $_SESSION['blogger_id'];?>;
@@ -22,7 +22,8 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
                 followingId: pId,
                 bloggerId: bId
            }
-	}
+	});
+	});
     $(document).ready(function(){
         $(".like").click(function(){
             var pId = this.id;
@@ -33,7 +34,7 @@ if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
                 bloggerId: bId
            },
            function(response,status){
-                 alert("*----Received Data----*\n\nResponse : " + response+"\n\nStatus : " + status);
+                // alert("*----Received Data----*\n\nResponse : " + response+"\n\nStatus : " + status);
                 response = $.parseJSON( response );
                 $("#likespan".concat(pId)).html(response.likes);
                 if(response.inserted){
@@ -62,7 +63,6 @@ input[type=text] {
     -webkit-transition: width 0.4s ease-in-out;
     transition: width 0.4s ease-in-out;
 }
-
 input[type=text]:focus {
     width: 250px;
 }
@@ -86,8 +86,7 @@ input[type=text]:focus {
 			
             <?php
                     try {
-
-                            $stmt = $db->query('SELECT postId, postTitle, postDesc, postDate FROM blog_post ORDER BY postId DESC');
+                            $stmt = $db->query('SELECT postId, postTitle, postDesc, postDate, bloggerId FROM blog_post ORDER BY postId DESC');
                             while($row = $stmt->fetch()){
                                 $stmt1 = $db->prepare('SELECT bloggerId FROM blog_post_like WHERE postId = :postId ');
                                 $stmt1->execute(array(':postId' => $row['postId']));
@@ -109,18 +108,13 @@ input[type=text]:focus {
                                         }
                                         echo '</button>';
                                         echo '<span id = "likespan'. $row['postId'] .'"> '. $likes .'</span>'.' </p>';
-										echo '<p><button class="follow" id="'. $row['postId'] . '">';
-										//if($follow <=0){
-											echo ' Follow ';
-										//}
-										//else{
-									//		echo ' Unfollow ';
-										//}
+										echo '<p><button class="follow" id="'. $row['bloggerId'] . '">';
+										echo 'Follow';
+										echo '</button>';
                                 echo '</div>';
                                 
                       
                             }
-
                     } catch(PDOException $e) {
                         echo $e->getMessage();
                     }
