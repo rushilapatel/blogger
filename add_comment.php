@@ -2,20 +2,16 @@
   require_once('includes/config_blogger.php');
   if(!$blogger->is_blogger_logged_in()){ header('Location: user/login.php'); }
   $resp = new \stdClass();
-  $stmt = $db->prepare('SELECT * FROM blog_post_comment NATURAL JOIN blog_blogger WHERE postId = :postId') ;
+  $stmt = $db->prepare('INSERT INTO blog_post_comment (postId,bloggerId,comment_description) VALUES (:postId,:bloggerId,:comment_description)') ;
   $stmt->execute(array(
-        ':postId' => $_REQUEST['postId']
+        ':postId' => $_REQUEST['postId'],
+        ':bloggerId' => $_REQUEST['bloggerId'],
+        ':comment_description' => $_REQUEST['commentDescription']
       ));
-  $resp->comments = array();
-  while($row = $stmt->fetch()){
-      $comment = new \stdClass();
-      $comment->commentId = $row['commentId'];
-      $comment->postId = $row['postId'];
-      $comment->bloggerId = $row['bloggerId'];
-      $comment->commentDescription = $row['comment_description'];
-      $comment->commentCreated = $row['comment_created'];
-      $comment->bloggerName = ucwords($row['bloggerName']);
-      array_push($resp->comments,$comment);
+  if($stmt->rowCount() > 0){
+    $resp->inserted = true;
+  }else{
+    $resp->inserted = false;
   }
   echo json_encode($resp);
 ?>
