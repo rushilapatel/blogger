@@ -4,7 +4,14 @@ require_once('../includes/config_blogger.php');
 
 
 //check if already logged in
-if( $blogger->is_blogger_logged_in() ){ header('Location: index.php'); }
+if( $blogger->is_blogger_logged_in() ){
+	if($blogger->is_blogger()){
+		header('Location: index.php');
+	}else{
+		header('Location: ../index.php');
+	}
+	exit;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,16 +32,17 @@ if( $blogger->is_blogger_logged_in() ){ header('Location: index.php'); }
 
 		$blogger_email = trim($_POST['email']);
 		$password = trim($_POST['password']);
-
-		if($blogger->login($blogger_email,$password)){
-
-			//logged in return to index page
-			header('Location: index.php');
+		$user_type = strtolower(trim($_POST['user_type']));
+		if($blogger->login($blogger_email,$password,$user_type)){
+			if($blogger->is_blogger()){
+				header('Location: index.php');
+			}else{
+				header('Location: ../index.php');
+			}
 			exit;
 
-
 		} else {
-			$message = '<p class="error">Wrong bloggername or password</p>';
+			$message = '<p class="error">Wrong user emailname or password</p>';
 		}
 
 	}//end if submit
@@ -45,7 +53,15 @@ if( $blogger->is_blogger_logged_in() ){ header('Location: index.php'); }
 	<form action="" method="post">
 	<p><label>Email</label><input type="text" name="email" value=""  /></p>
 	<p><label>Password</label><input type="password" name="password" value=""  /></p>
-	<p><label></label><input type="submit" name="submit" value="Login"  /></p>
+	<p>
+		<label>User Type</label><br />
+		<select name="user_type">
+			<option value="blogger">Blogger</option>
+			<option value="viewer">Viewer</option>
+		</select>
+	</p>
+	<p><input type="submit" name="submit" value="Login"  /></p>
+	<p><a name="register" href="register.php"/> Register </a>
 	</form>
 
 </div>

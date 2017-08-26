@@ -41,6 +41,10 @@ require_once('../includes/config_blogger.php');
 			$error[] = 'Passwords do not match.';
 		}
 
+		if($user_type ==''){
+			$error[] = 'Please select the user_type.';
+		}
+		$user_type = strtolower($user_type);
 		if($email ==''){
 			$error[] = 'Please enter the email address.';
 		}
@@ -51,11 +55,12 @@ require_once('../includes/config_blogger.php');
 
 			try {
 
-				$stmt = $db->prepare('INSERT INTO blog_blogger (bloggerName,password,bloggerEmail) VALUES (:bloggername, :password, :email)') ;
+				$stmt = $db->prepare('INSERT INTO blog_blogger (bloggerName,password,bloggerEmail,userType) VALUES (:bloggername, :password, :email, :userType)') ;
 				$stmt->execute(array(
 					':bloggername' => $bloggername,
 					':password' => $hashedpassword,
-					':email' => $email
+					':email' => $email,
+					':userType' => $user_type
 				));
 
 				//redirect to index page
@@ -91,6 +96,14 @@ require_once('../includes/config_blogger.php');
 
 		<p><label>Email</label><br />
 		<input type='text' name='email' value='<?php if(isset($error)){ echo $_POST['email'];}?>'></p>
+
+    <p>
+      <label>User Type</label><br />
+      <select name="user_type">
+  			<option value="blogger">Blogger</option>
+  			<option value="viewer">Viewer</option>
+  		</select>
+    </p>
 
 		<p><input type='submit' name='submit' value='Add blogger'></p>
 

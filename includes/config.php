@@ -1,7 +1,7 @@
 <?php
-ob_start();
-session_start();
 
+session_start();
+ob_start();
 //database credentials
 define('DBHOST','localhost');
 define('DBUSER','root');

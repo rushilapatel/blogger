@@ -3,7 +3,7 @@
 require_once('../includes/config_blogger.php');
 //if not logged in redirect to login page
 if(!$blogger->is_blogger_logged_in()){ header('Location: login.php'); }
-
+if(!$blogger->is_blogger()){ header('Location: ../index.php'); }
 //show message from add / edit page
 if(isset($_GET['delpost'])){
 
