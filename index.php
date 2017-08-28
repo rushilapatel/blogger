@@ -84,7 +84,7 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
         response = $.parseJSON(response);
         $("#likespan".concat(pId)).html(response.likes);
         if (response.inserted) {
-          $("#likeButton".concat(pId)).hide().html("Unlike").fadeIn(200);
+          $("#likeButton".concat(pId)).hide().html("UnLike").fadeIn(200);
         } else {
           $("#likeButton".concat(pId)).hide().html("Like").fadeIn(200);
         }
@@ -193,6 +193,7 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
     -moz-border-radius: 0px;
     background-image: none;
   }
+  
 
   input[type=text] {
     width: 250px;
@@ -211,6 +212,49 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
   input[type=text]:focus {
     width: 250px;
   }
+  .like{
+  margin-left:100px;
+      background-color: #4CAF50; /* Green */
+	  width:120px;
+    border: none;
+    color: white;
+    padding: 9px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	}
+  .bb {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+#fol{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 9px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.comment{
+ background-color: #4CAF50; /* Green */
+	  width:120px;
+    border: none;
+    color: white;
+    padding: 9px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
   </style>
   <meta charset="utf-8">
   <title>Blog</title>
@@ -221,13 +265,15 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
 
   <div id="wrapper">
     <h1>Blog</h1>
-    <form>
-      <input type="text" name="search" placeholder="Search.." id="search">
-    </form>
-    <hr/>
-    <a href="user/login.php">Login</a>
+<form  style="background-color:#333">
+
+      <input type="text" name="search" placeholder="Search.." id="search" >
+	
+    <a href="user/logout.php" class="bb"  style="float:right" >Logout</a>
+</form>
+   <!-- <a. href="user/login.php">Login</a>
     <a href="user/register.php">Register</a>
-    <a href="user/logout.php">Logout</a>
+    <a href="user/logout.php">Logout</a>-->
     <hr/>
 
     <?php
@@ -256,14 +302,7 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
         '<a href = "" class="bloggerName">'.
         $row['bloggerName'] .
         ' </a>';
-        echo '<button class="follow followButton'. $row['bloggerId'] . '">';
-        if($followed <= 0){
-          echo ' Follow ';
-        }
-        else{
-          echo ' Unfollow ';
-        }
-        echo '</button>'.
+
         '</p>';
 
 
@@ -279,13 +318,20 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
         'Read More'.
         '</a>'.
         '</p>';
-
-        echo '<p>'.
+        echo '<button id="fol"class="follow followButton'. $row['bloggerId'] . '">';
+        if($followed <= 0){
+          echo ' Follow ';
+        }
+        else{
+          echo ' Unfollow ';
+        }
+        echo '</button>'.
+        
         '<button  class="like" id="likeButton' . $row['postId'] . '">';
         if ($liked <= 0) {
-          echo ' Like ';
+          echo 'Like ';
         } else {
-          echo ' Unlike ';
+          echo 'Unlike ';
         }
         echo '</button>';
         echo '<span id = "likespan' . $row['postId'] . '">' .

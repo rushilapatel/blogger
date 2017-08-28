@@ -30,7 +30,7 @@ if(!$blogger->is_blogger()){ header('Location: ../index.php'); }
 <div id="wrapper">
 
 	<?php include('menu.php');?>
-	<p><a href="./">Blog Admin Index</a></p>
+	<!--<p><a href="./">Blog Admin Index</a></p>-->
 
 	<h2>Add Post</h2>
 

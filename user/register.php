@@ -5,6 +5,68 @@ require_once('../includes/config_blogger.php');
 <!doctype html>
 <html lang="en">
 <head>
+<style>
+
+.sl1{
+
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+  padding: 2px 20px;
+  text-align: center;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn {
+    float: left;
+    width: 100%;
+}
+.signupbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    float: left;
+    width: 100%;
+}
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+    }
+}
+</style>
   <meta charset="utf-8">
   <title>Register</title>
   <link rel="stylesheet" href="../style/normalize.css">
@@ -85,28 +147,28 @@ require_once('../includes/config_blogger.php');
 
 	<form action='' method='post'>
 
-		<p><label>bloggername</label><br />
+		<p><label><b>Username</b></label><br />
 		<input type='text' name='bloggername' value='<?php if(isset($error)){ echo $_POST['bloggername'];}?>'></p>
 
-		<p><label>Password</label><br />
+		<p><label><b>Password</b></label><br />
 		<input type='password' name='password' value='<?php if(isset($error)){ echo $_POST['password'];}?>'></p>
 
-		<p><label>Confirm Password</label><br />
+		<p><label><b>Confirm Password</b></label><br />
 		<input type='password' name='passwordConfirm' value='<?php if(isset($error)){ echo $_POST['passwordConfirm'];}?>'></p>
 
-		<p><label>Email</label><br />
+		<p><label><b>Email</b></label><br />
 		<input type='text' name='email' value='<?php if(isset($error)){ echo $_POST['email'];}?>'></p>
 
     <p>
-      <label>User Type</label><br />
-      <select name="user_type">
+      <label><b>User Type</b></label><br />
+      <select name="user_type" class="sl1">
   			<option value="blogger">Blogger</option>
   			<option value="viewer">Viewer</option>
   		</select>
     </p>
-
-		<p><input type='submit' name='submit' value='Add blogger'></p>
-
+<div class="clearfix">
+		<table style="border:none"><tr style="border:none"><td style="border:none"><a name="cancel" href="login.php"  class="cancelbtn" style="color:#FFFFFF;"><center>Cancel</center></a></td><td style="border:none"><input type='submit' name='submit' value='Sign Up' class="signupbtn"></td></tr></table>
+</div>
 	</form>
 
 </div>

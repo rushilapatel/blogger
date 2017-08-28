@@ -21,6 +21,52 @@ if( $blogger->is_blogger_logged_in() ){
   <link rel="stylesheet" href="../style/normalize.css">
   <link rel="stylesheet" href="../style/main.css">
 </head>
+<style>
+
+    input[type="text"]{
+       
+    }
+
+.sl1{
+background-color: #4CAF50;
+color: white;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+  padding: 2px 20px;
+  text-align: center;
+}
+.but{
+    background-color: #4CAF50;
+       -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+    color: white;
+    padding: 5px 15px;
+	bckground-ra
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.but1{
+    background-color: #4CAF50;
+       -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+    color: white;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+</style>
 <body>
 
 <div id="login">
@@ -51,17 +97,28 @@ if( $blogger->is_blogger_logged_in() ){
 	?>
 
 	<form action="" method="post">
-	<p><label>Email</label><input type="text" name="email" value=""  /></p>
-	<p><label>Password</label><input type="password" name="password" value=""  /></p>
-	<p>
-		<label>User Type</label><br />
-		<select name="user_type">
+	<table style="border:none;" >
+	<tr style="border:none;">
+	<th style="border:none;background-color:#550006;color:#FFFFFF"><label>Email</label></th><td style="border:none;"><input type="text" name="email" value=""  /></td></tr>
+	
+	<tr style="border:none;">
+	<th style="border:none; background-color:#550006;color:#FFFFFF"><label>Password</label></th><td style="border:none;"><input type="password" name="password" value=""   /></td></tr>
+	</table>
+	<br>
+	
+	<label><b>User Type</b></label>
+	
+	
+		<select name="user_type" class="sl1" style="margin-left:10px;">
 			<option value="blogger">Blogger</option>
 			<option value="viewer">Viewer</option>
 		</select>
-	</p>
-	<p><input type="submit" name="submit" value="Login"  /></p>
-	<p><a name="register" href="register.php"/> Register </a>
+	
+	<br><br>
+	<input type="submit" name="submit" value="Login" class="but" />
+	<a name="register" href="register.php" class="but1" style="float:right"/> Register </a>
+	
+	
 	</form>
 
 </div>
