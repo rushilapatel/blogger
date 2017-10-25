@@ -14,7 +14,7 @@ if(isset($_GET['delblogger'])){
 		$stmt = $db->prepare('DELETE FROM blog_blogger WHERE bloggerId = :bloggerId') ;
 		$stmt->execute(array(':bloggerId' => $_GET['delblogger']));
 
-		header('Location: bloggers.php?action=deleted');
+		header('Location: users.php?action=deleted');
 		exit;
 
 	}
@@ -69,9 +69,9 @@ if(isset($_GET['delblogger'])){
 				?>
 
 				<td>
-					<a href="edit-blogger.php?id=<?php echo $row['bloggerId'];?>">Edit</a>
+					<!--<a href="edit-blogger.php?id=<?php echo $row['bloggerId'];?>">Edit</a>-->
 					<?php if($row['bloggerId'] != 1){?>
-						| <a href="javascript:delblogger('<?php echo $row['bloggerId'];?>','<?php echo $row['bloggerName'];?>')">Delete</a>
+						 <a href="javascript:delblogger('<?php echo $row['bloggerId'];?>','<?php echo $row['bloggerName'];?>')">Delete</a>
 					<?php } ?>
 				</td>
 

@@ -33,7 +33,7 @@ li a:hover:not(.active) {
 <h1>Blog</h1>
 
 <ul id='adminmenu'>
-	<li class="active"><a href='index.php'>Blog</a></li>
+	<li class="active"><a href='index.php'>Home</a></li>
 	<li><a href="../" target="_blank">View Website</a></li>
 	<li><a href='logout.php'>Logout</a></li>
 </ul>

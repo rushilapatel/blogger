@@ -50,7 +50,7 @@ if(isset($_GET['delpost'])){
 	<table>
 	<tr>
 		<th>Title</th>
-                <th>Blogger</th>
+        <th>Blogger</th>
 		<th>Date</th>
 		<th>Action</th>
 	</tr>

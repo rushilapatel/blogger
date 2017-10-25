@@ -95,14 +95,14 @@ color: white;
 
 	if(isset($message)){ echo $message; }
 	?>
-
-	<form action="" method="post">
+<h2><center>Login</center></h2>
+	<form action="" method="post" style="border:ridge">
 	<table style="border:none;" >
 	<tr style="border:none;">
-	<th style="border:none;background-color:#550006;color:#FFFFFF"><label>Email</label></th><td style="border:none;"><input type="text" name="email" value=""  /></td></tr>
+	<th style="border:none;background-color:#550006;color:#FFFFFF"><label>Email</label></th><td style="border:none;"><input type="text" style="border-color:#000000" name="email" value=""  /></td></tr>
 	
 	<tr style="border:none;">
-	<th style="border:none; background-color:#550006;color:#FFFFFF"><label>Password</label></th><td style="border:none;"><input type="password" name="password" value=""   /></td></tr>
+	<th style="border:none; background-color:#550006;color:#FFFFFF"><label>Password</label></th><td style="border:none;"><input type="password" name="password" value="" style="border-color:#000000"  /></td></tr>
 	</table>
 	<br>
 	

@@ -24,6 +24,23 @@ if(!$blogger->is_blogger()){ header('Location: ../index.php'); }
               toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
           });
   </script>
+  <style>
+    .but{
+    background-color: #4CAF50;
+       -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+    color: white;
+    padding: 5px 15px;
+	bckground-ra
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+  </style>
 </head>
 <body>
 
@@ -102,7 +119,7 @@ if(!$blogger->is_blogger()){ header('Location: ../index.php'); }
 		<p><label>Content</label><br />
 		<textarea name='postCont' cols='60' rows='10'><?php if(isset($error)){ echo $_POST['postCont'];}?></textarea></p>
 
-		<p><input type='submit' name='submit' value='Submit'></p>
+		<p><input type='submit' name='submit' value='Submit' class="but"></p>
 
 	</form>
 

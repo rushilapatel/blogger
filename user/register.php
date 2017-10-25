@@ -110,7 +110,9 @@ button {
 		if($email ==''){
 			$error[] = 'Please enter the email address.';
 		}
-
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      	$error[] = "Invalid email format"; 
+    	}
 		if(!isset($error)){
 
 			$hashedpassword = $blogger->password_hash($password, PASSWORD_BCRYPT);

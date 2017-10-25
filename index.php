@@ -212,18 +212,68 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
   input[type=text]:focus {
     width: 250px;
   }
-  .like{
-  margin-left:100px;
-      background-color: #4CAF50; /* Green */
-	  width:120px;
-    border: none;
-    color: white;
-    padding: 9px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-	}
+  .like {
+   margin-left:100px;
+  padding: 9px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px #999;
+}
+
+.like:hover {background-color: #3e8e41}
+
+.like:active {
+  background-color: #3e8e41;
+  box-shadow: 0 1px #666;
+  transform: translateY(4px);
+}
+#fol {
+  padding: 9px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px #999;
+}
+
+#fol:hover {background-color: #3e8e41}
+
+#fol:active {
+  background-color: #3e8e41;
+  box-shadow: 0 1px #666;
+  transform: translateY(4px);
+}
+.comment {
+  padding: 9px 20px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px #999;
+}
+
+.comment:hover {background-color: #3e8e41}
+
+.comment:active {
+  background-color: #3e8e41;
+  box-shadow: 0 1px #666;
+  transform: translateY(4px);
+}
+
   .bb {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -234,37 +284,23 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
     display: inline-block;
     font-size: 16px;
 }
-#fol{
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 9px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+.bb:hover{
+background-color:#FFFFFF;
+border:thick;
+color:#4CAF50;
 }
-.comment{
- background-color: #4CAF50; /* Green */
-	  width:120px;
-    border: none;
-    color: white;
-    padding: 9px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
+
   </style>
   <meta charset="utf-8">
   <title>Blog</title>
   <link rel="stylesheet" href="style/normalize.css">
   <link rel="stylesheet" href="style/main.css">
 </head>
-<body>
+<body style="width:100%;">
 
   <div id="wrapper">
     <h1>Blog</h1>
+	
 <form  style="background-color:#333">
 
       <input type="text" name="search" placeholder="Search.." id="search" >
@@ -334,7 +370,7 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
           echo 'Unlike ';
         }
         echo '</button>';
-        echo '<span id = "likespan' . $row['postId'] . '">' .
+        echo '<span style="margin-left:25px ;"id = "likespan' . $row['postId'] . '">' .
         $likes .
         '</span>' .
         ' </p>';
